@@ -22,3 +22,6 @@ Returns the top n albums from Apple's iTunes RSS feed
 ### Parameters
 count (integer): Default value is 100
 
+### Options
+details (boolean): If set to true, the full response from Apple's RSS will be shown. Otherwise, the response will be a simple list.
+

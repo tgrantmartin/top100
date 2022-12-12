@@ -32,7 +32,7 @@ return [
     ],
 
     'apple_music' => [
-        'url' => env('APPLE_RSS_FEED'.'https://itunes.apple.com/us/rss/topalbums/'),
+        'url' => env('APPLE_RSS_FEED','https://itunes.apple.com/us/rss/topalbums/'),
         'format' => env('APPLE_RSS_FORMAT','json'),
     ],
 
