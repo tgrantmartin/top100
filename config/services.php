@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'apple_music' => [
+        'url' => env('APPLE_RSS_FEED'),
+        'format' => env('APPLE_RSS_FORMAT','json'),
+    ],
+
 ];
