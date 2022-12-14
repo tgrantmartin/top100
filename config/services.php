@@ -36,4 +36,9 @@ return [
         'format' => env('APPLE_RSS_FORMAT','json'),
     ],
 
+    'apple_music_v2' => [
+        'url' => env('APPLE_V2_FEED','https://rss.applemarketingtools.com/api/v2/us/music/most-played/{{n}}/albums.{{format}}'),
+        'format' => env('APPLE_RSS_FORMAT','json'),
+    ],
+
 ];

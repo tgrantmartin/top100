@@ -4,82 +4,51 @@ namespace App\Http\Controllers;
 
 use App\Models\TopAlbum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class TopAlbumController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the albums.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, $count = 100)
     {
-        //
+        $response = Http::get(config('services.apple_music.url') . "/limit=$count/" . config('services.apple_music.format'));
+
+        if ($request->details) {
+            return $response->json();
+        }
+
+        $collection = collect($response->json()['feed']['entry']);
+
+        return $collection->pluck(['im:name'])->pluck('label');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the albums from apple's new api.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function indexV2(Request $request, $count = 100)
     {
-        //
-    }
+        $format = config('services.apple_music_v2.format');
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $url = Str::swap([
+            '{{n}}' => $count,
+            '{{format}}' => $format
+        ], config('services.apple_music_v2.url'));
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TopAlbum  $topAlbum
-     * @return \Illuminate\Http\Response
-     */
-    public function show(TopAlbum $topAlbum)
-    {
-        //
-    }
+        $response = Http::get($url);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\TopAlbum  $topAlbum
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(TopAlbum $topAlbum)
-    {
-        //
-    }
+        if ($request->details) {
+            return $response->json();
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TopAlbum  $topAlbum
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, TopAlbum $topAlbum)
-    {
-        //
-    }
+        $collection = collect($response->json()['feed']['results']);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\TopAlbum  $topAlbum
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TopAlbum $topAlbum)
-    {
-        //
+        return $collection;
     }
 }

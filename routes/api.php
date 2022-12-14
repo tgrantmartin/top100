@@ -19,14 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/top_albums/{count?}', function(Request $request, $count = 100){
-    $response = Http::get(config('services.apple_music.url')."/limit=$count/".config('services.apple_music.format'));
+Route::get('/top_albums/{count?}',[\App\Http\Controllers\TopAlbumController::class,'index']);
 
-    if($request->details) {
-        return $response->json();
-    }
-
-    $collection = collect($response->json()['feed']['entry']);
-
-    return $collection->pluck(['im:name'])->pluck('label');
-});
+Route::get('/v2/top_albums/{count?}',[\App\Http\Controllers\TopAlbumController::class,'indexV2']);
